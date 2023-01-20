@@ -19,6 +19,7 @@ export(count_ranked_pl_trees)
 export(expected_value_function)
 export(get_mle_ltree)
 export(lrt_ltree)
+export(crp_tree_power)
 
 
 
