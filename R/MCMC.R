@@ -6,7 +6,7 @@
 #' - computing the null thresholds
 #' Also can return the number of acceptances in each step of the MCMC
 #'
-#' @param tree A phylo object: ranked and partially labeled with two categories
+#' @param tree A \code{phylo} object: ranked and partially labeled with two categories
 #' @param alphas Vector of alphas for which to compute the power under
 #' @param sig_level Numeric value of the significance level
 #' @param num_sample Integer: number of iterations to run the labeling chain of the MCMC

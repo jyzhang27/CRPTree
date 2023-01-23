@@ -7,7 +7,7 @@
 #' @param N Number of tips
 #' @param B Number of tips labeled blue
 #' @param alpha parameter of the CRP-TREE model
-#' @return A phylo object generated from CRP-TREE(alpha)
+#' @return A \code{phylo} object generated from CRP-TREE(alpha)
 #' @export
 #' @examples rcrp_tree(10, 5, 2)
 rcrp_tree <- function(N, B, alpha) {
@@ -36,7 +36,7 @@ rcrp_tree <- function(N, B, alpha) {
     edge_list[1,] = c(N+1, 2)
     edge_list[2,] = c(N+1, 1)
     tree <- list(edge = edge_list, tip.label = c(rtips[2], rtips[1]), Nnode = N-1, edge.length=c(1,1))
-    class(tree) <- "phylo"
+    class(tree) <- "\code{phylo}"
     return(tree)
   }
 
@@ -114,7 +114,7 @@ rcrp_tree <- function(N, B, alpha) {
 
   # Create desired format
   tree <- list(edge = edge_list, tip.label = 1:N, Nnode = N-1, edge.length=branch_lengths)
-  class(tree) <- "phylo"
+  class(tree) <- "\code{phylo}"
   tree <- read.tree(text=NewickTree(tree))
   tree$tip.label = rtips[strtoi(tree$tip.label)]
 
@@ -125,7 +125,7 @@ rcrp_tree <- function(N, B, alpha) {
 #'
 #' This function plots a partially labeled tree with tip colors red and blue
 #'
-#' @param tree A phylo object to plot
+#' @param tree A \code{phylo} object to plot
 #' @param node_labels Boolean on whether or not to highlight internal node labels
 #' @param cex_tip Numeric for the scaling factor of the tip labels
 #' @param cex_node Numeric for the scaling factor of the internal node labels
@@ -149,7 +149,7 @@ plot_crp_tree <- function(tree, node_labels=FALSE, cex_tip=1.5, cex_node= 0.5, f
 #' This function computes the probability of the ranked, planar, partially labeled
 #' tree shape under the CRP-TREE model for a specific alpha value
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param alpha Numeric value for alpha
 #' @param only_prob Boolean specifying whether to return only the probability (default \code{TRUE}). If \code{FALSE}, returns a list with the log probability and sufficient statistics S and Ws
 #' @return Numeric of the probability or list of log probability and sufficient statistics
@@ -176,7 +176,7 @@ pcrp_tree <- function(tree, alpha, only_prob = TRUE) {
 #' This function computes the conditional probability of partially labeled tree shape
 # given the ranked tree shape under CRP-TREE(alpha=1)
 #'
-#' @param tree A phylo object: a ranked, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, partially labeled tree shape
 #' @return Numeric of the probability
 #' @export
 pnull_tree <- function(tree) {
@@ -191,7 +191,7 @@ pnull_tree <- function(tree) {
 
 #' This function computes the number of same attachments for the given tree
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nodes_to_switch: vector of internal nodes to switch the left and right subtrees when calculating S (default empty)
 #' @param tip_order Boolean for whether to return the order the tips were added or not
 #' @return Integer: number of same attachments

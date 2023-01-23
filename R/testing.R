@@ -2,11 +2,11 @@
 #'
 #' This function converts a given tree into Newick format, with two tip labels, isochronous tips, and ranked internal nodes
 #'
-#' @param tree A phylo object
+#' @param tree A \code{phylo} object
 #' @param term String specifying all tip labels containing this term are one category, and the rest form the other category
 #' @param tip_corresponding Matrix with two columns: first column is the tip labels of the tree, second is the category
 #'
-#' @return A phylo object of the desired format
+#' @return A \code{phylo} object of the desired format
 #' @export
 process_tree <- function(tree, term='', tip_corresponding=NULL) {
   tip_labels <- tree$tip.label
@@ -55,7 +55,7 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
 #'
 #' This function simulates the null distribution of S by randomly sampling planarities and labelings simultaneously
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm Integer: number of permutations of the given tree
 #'
 #' @return A vector of S values
@@ -73,7 +73,7 @@ simulate_S_tree_null <- function(tree, nperm) {
 #'
 #' This function simulates the observed distribution of S by randomly sampling planarities
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm Integer: number of planar permutations of the given tree
 #'
 #' @return A vector of S values
@@ -113,7 +113,7 @@ simulate_S_observed <- function(tree, nperm) {
 #' This function estimates the mean number of attachments for a given tree shape
 #' with a set number of permutations
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm Integer: number of planar permutations of the given tree
 #'
 #' @return An integer with the value of S_mean
@@ -127,7 +127,7 @@ compute_S_mean <- function(tree, nperm) {
 #' This function samples S for a grid of planarities and labels where
 #' one row is one planar representation and one column is a partial labeling
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm_planar Integer: number of planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree
 #'
@@ -192,7 +192,7 @@ simulate_S_grid <- function(tree, nperm_planar, nperm_labels) {
 #'
 #' This function simulates the null distribution of S_mean for a given tree
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm_planar Integer: number of planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree
 #'
@@ -204,13 +204,13 @@ simulate_S_mean_tree <- function(tree, nperm_planar, nperm_labels) {
   return(S_mean)
 }
 
-#' Computes multiple p-values for phylogenetic association testing
+#' Computes multiple p-values for \code{phylo}genetic association testing
 #'
-#' This function computes the p-value for phylogenetic association testing
+#' This function computes the p-value for \code{phylo}genetic association testing
 #' Default: average S p-value, tree-average p-value
 #' Additional: parsimony score, association index, Moran's I test
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm_obs Integer: number of planar permutations of the given tree
 #' @param nperm_null Integer: number of simultaneous label planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree

@@ -5,7 +5,7 @@
 #'
 #' This function computes the table representation associated with a CRP-TREE tree
 #'
-#' @param tree A phylo object: a ranked, planar, partially labeled tree shape
+#' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @return List of tables where the numbers corresponds to the tips on the tree with rightmost = 1, leftmost = N
 #' @export
 get_crp_tables <- function(tree) {
@@ -186,7 +186,7 @@ create_tree_attachments <- function(attachment_matrix) {
 
   # Create desired format
   tree <- list(edge = edge_list, tip.label = 1:N, Nnode = N-1, edge.length=branch_lengths)
-  class(tree) <- "phylo"
+  class(tree) <- "\code{phylo}"
   tree <- read.tree(text=NewickTree(tree))
   node_labels <- colors[strtoi(tree$tip.label)]
   tree$tip.label = node_labels
