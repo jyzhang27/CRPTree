@@ -1,0 +1,7 @@
+"0","S_obs <- simulate_S_observed(tree_ex, 50)"
+"0","S_mean <- mean(S_obs)"
+"0",""
+"0","S_tree_null <- simulate_S_tree_null(tree_ex, 50)"
+"0","pval_tree <- mean(rbind(outer(S_tree_null, S_obs, '>='), rep(TRUE, length(S_obs))))"
+"0",""
+"0","ggplot(as.data.frame(S_tree_null), aes(S_tree_null)) + geom_bar(color='black', fill='gray') + theme_light()+ xlab('S') + ggtitle('Approximate null distribution of S conditional on T_N')"

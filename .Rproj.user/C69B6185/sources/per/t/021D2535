@@ -1,0 +1,24 @@
+{
+    "id": "021D2535",
+    "path": "~/Documents/CRPTree/R/crp_tree.R",
+    "project_path": "R/crp_tree.R",
+    "type": "r_source",
+    "hash": "115058133",
+    "contents": "",
+    "dirty": false,
+    "created": 1674445686165.0,
+    "source_on_save": false,
+    "relative_order": 4,
+    "properties": {
+        "cursorPosition": "120,14",
+        "scrollLine": "109"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1674445704,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1674445704202,
+    "read_only": false,
+    "read_only_alternatives": []
+}

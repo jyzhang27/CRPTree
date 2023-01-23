@@ -16,7 +16,7 @@ crp_tree_power(
 )
 }
 \arguments{
-\item{tree}{A phylo object: ranked and partially labeled with two categories}
+\item{tree}{A \code{phylo} object: ranked and partially labeled with two categories}
 
 \item{alphas}{Vector of alphas for which to compute the power under}
 

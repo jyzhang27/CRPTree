@@ -7,7 +7,7 @@
 pcrp_tree(tree, alpha, only_prob = TRUE)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, planar, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 
 \item{alpha}{Numeric value for alpha}
 

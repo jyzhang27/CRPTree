@@ -7,7 +7,7 @@
 simulate_S_tree_null(tree, nperm)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, planar, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 
 \item{nperm}{Integer: number of permutations of the given tree}
 }

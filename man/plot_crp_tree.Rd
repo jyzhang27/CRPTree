@@ -15,7 +15,7 @@ plot_crp_tree(
 )
 }
 \arguments{
-\item{tree}{A phylo object to plot}
+\item{tree}{A \code{phylo} object to plot}
 
 \item{node_labels}{Boolean on whether or not to highlight internal node labels}
 

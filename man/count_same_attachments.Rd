@@ -7,7 +7,7 @@
 count_same_attachments(tree, nodes_to_switch = c(), tip_order = FALSE)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, planar, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 
 \item{tip_order}{Boolean for whether to return the order the tips were added or not}
 

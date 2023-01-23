@@ -7,7 +7,7 @@
 pnull_tree(tree)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, partially labeled tree shape}
 }
 \value{
 Numeric of the probability

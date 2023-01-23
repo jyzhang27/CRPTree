@@ -14,7 +14,7 @@ rcrp_tree(N, B, alpha)
 \item{alpha}{parameter of the CRP-TREE model}
 }
 \value{
-A phylo object generated from CRP-TREE(alpha)
+A \code{phylo} object generated from CRP-TREE(alpha)
 }
 \description{
 This function generates a ranked, planar, partially labeled tree under

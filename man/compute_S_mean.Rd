@@ -7,7 +7,7 @@
 compute_S_mean(tree, nperm)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, planar, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 
 \item{nperm}{Integer: number of planar permutations of the given tree}
 }

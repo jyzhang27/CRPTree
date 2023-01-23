@@ -1,8 +1,8 @@
 Package: CRPTree
-Title:  phylogenetic association test based on a Chinese Restaurant Process-esque model
+Title:  Phylogenetic association test based on a Chinese Restaurant Process-esque model
 Version: 0.0.0.9000
 Authors@R: 
-    person("Julie", "Zhang", , "jyz27@stanford.edu", role = "aut")
+    person("Julie", "Zhang", , "jyz27@stanford.edu", role = c("aut", "cre"))
 Description: What the package does (one paragraph).
 License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
     license
@@ -19,3 +19,6 @@ Depends:
   parallel,
   arrangements,
   stepR
+Suggests: knitr, rmarkdown
+VignetteBuilder: knitr
+BuildVignettes: true

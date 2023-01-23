@@ -7,7 +7,7 @@
 get_crp_tables(tree)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, planar, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 }
 \value{
 List of tables where the numbers corresponds to the tips on the tree with rightmost = 1, leftmost = N

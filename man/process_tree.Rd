@@ -7,14 +7,14 @@
 process_tree(tree, term = "", tip_corresponding = NULL)
 }
 \arguments{
-\item{tree}{A phylo object}
+\item{tree}{A \code{phylo} object}
 
 \item{term}{String specifying all tip labels containing this term are one category, and the rest form the other category}
 
 \item{tip_corresponding}{Matrix with two columns: first column is the tip labels of the tree, second is the category}
 }
 \value{
-A phylo object of the desired format
+A \code{phylo} object of the desired format
 }
 \description{
 This function converts a given tree into Newick format, with two tip labels, isochronous tips, and ranked internal nodes

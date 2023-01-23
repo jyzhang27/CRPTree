@@ -7,7 +7,7 @@
 simulate_S_grid(tree, nperm_planar, nperm_labels)
 }
 \arguments{
-\item{tree}{A phylo object: a ranked, planar, partially labeled tree shape}
+\item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 
 \item{nperm_planar}{Integer: number of planar permutations of the given tree}
 

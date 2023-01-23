@@ -1,0 +1,4 @@
+"0","tree_ex_reorder <- reorder_branches(tree_ex, c(42, 43))"
+"2","Error in reorder_branches(tree_ex, c(42, 43)) : 
+  could not find function ""reorder_branches""
+"

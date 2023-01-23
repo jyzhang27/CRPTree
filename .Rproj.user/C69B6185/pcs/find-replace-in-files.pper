@@ -1,0 +1,13 @@
+{
+    "dialog-state": {
+        "query": "\\c",
+        "path": "~/Documents/CRPTree",
+        "regex": false,
+        "caseSensitive": false,
+        "filePatterns": [],
+        "excludeFilePatterns": [],
+        "resultsCount": 21,
+        "errorCount": 0,
+        "replaceErrors": ""
+    }
+}

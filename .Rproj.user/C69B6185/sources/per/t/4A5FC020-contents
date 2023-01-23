@@ -1,0 +1,202 @@
+---
+title: "CRP-TREE"
+author: "Julie Zhang"
+date: ""
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{CRP-TREE}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
+library(CRPTree)
+library(ggplot2)
+set.seed(1234)
+
+```
+
+## Generating a tree according to the CRP-TREE model
+
+Set your own values of $N, B, \alpha$. We generate $\tilde{T}^{\ell}_{N,B}$ with $N=30, B=10, \alpha=2$.
+
+```{r}
+N <- 30
+B <- 10
+alpha <- 2
+tree_ex <- rcrp_tree(N, B, alpha)
+
+```
+
+We can plot the tree with and without internal node labels. 
+ 
+```{r}
+plot_crp_tree(tree_ex)
+plot_crp_tree(tree_ex, TRUE)
+```
+
+Next, we can calculate the probability of observing $\tilde{T}^{\ell}_{N,B}$ under various values of $\alpha$. 
+
+```{r}
+pcrp_tree(tree_ex, 1)
+pcrp_tree(tree_ex, 2)
+pcrp_tree(tree_ex, 5)
+
+```
+
+In addition, we can calculate the conditional probability of observing $T^{\ell}_{N,B}$ given the tree shape $T_N$ under our initial null model.
+
+```{r}
+pnull_tree(tree_ex)
+```
+
+Once we have the tree, we can calculate the number of same attachments $S$. 
+
+```{r}
+count_same_attachments(tree_ex)
+```
+
+If we had a tree that was not planar, then we can average out the planarity by calculating the mean number of same attachments. We do so via Monte Carlo approximation and specifying the number of planar permutations. 
+
+```{r}
+s_0 <- compute_S_mean(tree_ex, 500)
+s_0
+```
+
+### Processing trees 
+If provided with a phylogenetic tree, it must be in Newick format with tip labels $(-1, -2)$, have isochronous tips, and have no tied internal nodes. You would use \texttt{process\_tree} to modifys any tree into the desired form. The tip labels can be specified directly (ie only two possible tip labels). The argument \texttt{term} is used to change tip labels to $(-1,-2)$ given that each tip label either contains or does not contain the term. The data frame \texttt{tip\_corresponding} can also be provided as the category of each tip label. If neither argument is given, then the tree is returned with its original tip labels. 
+
+## Testing on fixed phylogenetic trees. 
+
+For ranked, partially labeled, non-planar trees $T^{\ell}_{N,B}$, we have two methods of testing.
+
+### Fixing the ranked tree shape
+The first method measures how extreme $S$ is conditioned on a ranked tree shape $T_N$. The null distribution is the distribution of $S$ over the space of all ranked, partially labeled, planar trees $\tilde{T}^{\ell}_{N,B}$ that are compatible with $T_N$. The observed distribution is the distribution of $S$ over the planar representations of the given $T^{\ell}_{N,B}$. Then for each observed $S$, we calculate a p-value, and define the \textbf{tree shape conditioned p-value} $p_T$ to be the average of all such p-values. 
+
+```{r}
+S_obs <- simulate_S_observed(tree_ex, 50)
+S_mean <- mean(S_obs)
+
+S_tree_null <- simulate_S_tree_null(tree_ex, 50)
+pval_tree <- mean(rbind(outer(S_tree_null, S_obs, '>='), rep(TRUE, length(S_obs))))
+
+ggplot(as.data.frame(S_tree_null), aes(S_tree_null)) + geom_bar(color='black', fill='gray') + theme_light()+ xlab('S') + ggtitle('Approximate null distribution of S conditional on T_N')
+  
+```
+
+### Using $\hat{S_0}$ by averaging over planar representations
+
+The second method simulates a null distribution of $\hat{S_0}$ by relabeling the given ranked tree shape and computing $\hat{S_0}$ for each relabeling. Then we compute $\bar{p}_S$, the average $S$ p-value using the observed value of $\hat{S_0}$.
+
+```{r}
+S_mean_null <- simulate_S_mean_tree(tree_ex, 50, 49)
+pval_avg <- (1+ sum(S_mean_null >= S_mean))/(1+length(S_mean_null))
+
+ggplot(as.data.frame(S_mean_null), aes(S_mean_null)) + 
+  geom_histogram(color='black', fill='gray', bins=20) + theme_light()+
+  scale_x_continuous(limits=c(floor(min(S_mean_null)), ceiling(max(c(max(S_mean_null), S_mean))))) +
+  geom_vline(xintercept=S_mean, color='red') + xlab('S_0') + 
+  ggtitle('Approximate null distribution of S_0, Red line is observed value')
+```
+
+There is a function if you just want the observed $\hat{S_0}$ for the partially labeled ranked tree shape, and the two p-values. There are additional parameters so that the null distributions and observed $S$ distributions can be saved for future use. 
+
+```{r}
+one_tree_all_methods(tree_ex, 50, 49, 49)
+```
+
+We can also compare to three other existing methods by specifying additional arguments.
+```{r}
+one_tree_all_methods(tree_ex, 50, 49, 49, alt_methods = TRUE)
+```
+
+### Power analysis
+If you would to do a power analysis for a given ranked tree shape and an $\alpha$ value, we would need to sample under the alternative. The following function directly allows you to do so. More interested users can look at the code for further detail. The number of samples can be set to however many needed, but 60\% seems to be the acceptance rate for the planar sampling, while the relabeling step is around 50\% but varies quite a bit from run to run. The significance level is default set to 0.05. 
+
+
+```{r}
+alphas <- c(2,5, 10, 20)
+crp_tree_power(tree_ex, alphas)
+```
+
+## Incorporating phylogenetic uncertainty 
+In many Bayesian phylogenetic applications, we will have a posterior sample of trees. We can use our methods to get a posterior distribution of $\hat{S_0}, p_T, \bar{p}_S$ in order to make conclusions about whether there may be preferential attachment. We will present our example on Yellow fever virus here. The first step is to process the trees, in our case the term `Human' is the binary factor for the tip labels. Next, we run the methods in order to get our three quantities of interest. 
+
+```{r}
+
+data(ex_yfv)
+yfv_post <- posterior_trees_pval(ex_yfv, 'Human')
+```
+
+We can plot the posterior distribution of these quantities and look at some summary statistics.
+
+```{r}
+colSums(yfv_post < 0.05)
+colSums(yfv_post < 0.01)
+
+median(yfv_post$S0)
+quantile(yfv_post$S0, probs=c(0.025, 0.975))
+
+ggplot(data=yfv_post,aes(p_T)) + geom_histogram(color='black', fill='gray') + 
+  theme_light() + xlab('Posterior p-value') + geom_vline(xintercept=0.05, color='red') + 
+  ggtitle('Posterior trees from Yellow fever virus samples') 
+
+ggplot(data=yfv_post, aes(S0)) + 
+  geom_histogram(color='black', fill='gray') + theme_light() + xlab('Posterior S0') +
+  ggtitle('Posterior trees from Yellow fever virus samples') 
+```
+
+Finally, we can use the BaTS method. For this, we need the trees to be with the original tip labels, because we permute the taxon in the same way for each tree. We would compare the final quantity \texttt{yfv_bats_medians} to the value of \texttt{median(yfv_post$S0)}. Here we apply BaTS. 
+
+```{r}
+yfv_bats_medians <- posterior_trees_bats(ex_yfv, 'Human')
+summary(yfv_bats_medians)
+quantile(yfv_bats_medians, probs=c(0.025, 0.975))
+```
+
+## Fixed Tree Computations
+
+### Counting partial labels
+Fix any ranked tree shape $T_N$ and $B$. We want to count the number of ranked, partially labeled representations (i.e. $T^{\ell}_{N,B}$) of $T_N$. Let's try it out on our example tree from above, which has 30 tips and 10 blue tips: there are more than 2 million possible labelings. 
+
+```{r}
+count_partial_labels(tree_ex, 10)
+```
+
+We can also count the total number of ranked, partially labeled tree shapes for a specific $N,B$. This number grows very fast, so be weary when running. For example, when $N=8, B=4$, there are 7428 possibilities.
+
+```{r}
+count_ranked_pl_trees(8,4)
+```
+
+
+### Moments
+Given values for $N,B,\alpha$, we can calculate the expected value of $S$ under the CRP-TREE model. Taking the parameters we used to generate \texttt{tree_ex}. With $\alpha=2$, the expected value is approximately 18.92, while our observed value was 21.136. Under $\alpha=1$, the expected value is lower at 15.126. 
+
+```{r}
+expected_value_function(30, 10, 2)
+
+expected_value_function(30, 10, 1)
+```
+
+### Maximum Likelihood
+If you have a planar, partially labeled ranked tree shape, or a list of independent such trees (with the same $N,B$), then you can calculate the MLE $\hat{\alpha}^{MLE}$.  
+
+```{r}
+get_mle_1tree(tree_ex)$maximum
+
+tree_ex_2 <- rcrp_tree(N, B, alpha)
+get_mle_trees(list(tree_ex, tree_ex_2))$maximum
+```
+
+Likelihood ratio tests for $H_0:\alpha=1$ vs $H_1 : \alpha>1$. 
+
+```{r}
+lrt_1tree(tree_ex)
+
+lrt_many_trees(list(tree_ex, tree_ex_2))
+```
+
+
+
