@@ -1,8 +1,0 @@
-"0","S_mean_null <- simulate_S_mean_tree(tree_ex, 50, 49)"
-"0","pval_avg <- (1+ sum(S_mean_null >= S_mean))/(1+length(S_mean_null))"
-"0",""
-"0","ggplot(as.data.frame(S_mean_null), aes(S_mean_null)) + "
-"0","  geom_histogram(color='black', fill='gray', bins=20) + theme_light()+"
-"0","  scale_x_continuous(limits=c(floor(min(S_mean_null)), ceiling(max(c(max(S_mean_null), S_mean))))) +"
-"0","  geom_vline(xintercept=S_mean, color='red') + xlab('S_0') + "
-"0","  ggtitle('Approximate null distribution of S_0, Red line is observed value')"

@@ -1,1 +1,0 @@
-{"frames":[{"func":"one_tree_all_methods(tree_ex, 50, 49, 49, alt_methods = TRUE)","file":"","line_number":0,"end_line_number":0,"character_number":0,"end_character_number":0}],"message":"Error in one_tree_all_methods(tree_ex, 50, 49, 49, alt_methods = TRUE) : \n  object 'results' not found\n"}

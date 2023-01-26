@@ -1,4 +1,3 @@
-
 #' Generate a tree according to the CRP-TREE model
 #'
 #' This function generates a ranked, planar, partially labeled tree under
@@ -8,6 +7,19 @@
 #' @param B Number of tips labeled blue
 #' @param alpha parameter of the CRP-TREE model
 #' @return A \code{phylo} object generated from CRP-TREE(alpha)
+#'
+#' @import ape
+#' @import apTreeshape
+#' @import phangorn
+#' @import castor
+#' @import TreeTools
+#' @import phytools
+#' @import parallel
+#' @import arrangements
+#' @import stepR
+#' @import stats
+#' @import utils
+#'
 #' @export
 #' @examples rcrp_tree(10, 5, 2)
 rcrp_tree <- function(N, B, alpha) {
@@ -192,7 +204,7 @@ pnull_tree <- function(tree) {
 #' This function computes the number of same attachments for the given tree
 #'
 #' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
-#' @param nodes_to_switch: vector of internal nodes to switch the left and right subtrees when calculating S (default empty)
+#' @param nodes_to_switch vector of internal nodes to switch the left and right subtrees when calculating S (default empty)
 #' @param tip_order Boolean for whether to return the order the tips were added or not
 #' @return Integer: number of same attachments
 #' @export

@@ -1,0 +1,59 @@
+---
+title: "Bayesian Examples"
+author: "Julie Zhang"
+date: ""
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Bayesian}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(CRPTree)
+```
+
+
+## Incorporating phylogenetic uncertainty 
+
+[I haven't fixed loading the data]
+In many Bayesian phylogenetic applications, we will have a posterior sample of trees. We can use our methods to get a posterior distribution of $\hat{S_0}, p_T, \bar{p}_S$ in order to make conclusions about whether there may be preferential attachment. We will present our example on Yellow fever virus here. The first step is to process the trees, in our case the term `Human' is the binary factor for the tip labels. Next, we run the methods in order to get our three quantities of interest. 
+
+```{r}
+
+#data(ex_yfv)
+#yfv_post <- posterior_trees_pval(ex_yfv, 'Human')
+```
+
+We can plot the posterior distribution of these quantities and look at some summary statistics.
+
+```{r}
+#colSums(yfv_post < 0.05)
+#colSums(yfv_post < 0.01)
+
+#median(yfv_post$S0)
+#quantile(yfv_post$S0, probs=c(0.025, 0.975))
+
+#ggplot(data=yfv_post,aes(p_T)) + geom_histogram(color='black', fill='gray') + 
+#  theme_light() + xlab('Posterior p-value') + geom_vline(xintercept=0.05, color='red') + 
+#  ggtitle('Posterior trees from Yellow fever virus samples') 
+
+#ggplot(data=yfv_post, aes(S0)) + 
+#  geom_histogram(color='black', fill='gray') + theme_light() + xlab('Posterior S0') +
+#  ggtitle('Posterior trees from Yellow fever virus samples') 
+```
+
+Finally, we can use the BaTS method. For this, we need the trees to be with the original tip labels, because we permute the taxon in the same way for each tree. We would compare the final quantity \texttt{yfv_bats_medians} to the value of \texttt{median(yfv_post$S0)}. Here we apply BaTS. 
+
+```{r}
+#yfv_bats_medians <- posterior_trees_bats(ex_yfv, 'Human')
+#summary(yfv_bats_medians)
+#quantile(yfv_bats_medians, probs=c(0.025, 0.975))
+```

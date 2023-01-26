@@ -88,7 +88,7 @@ simulate_S_observed <- function(tree, nperm) {
   if (nperm >= max_possible) {
     s_stat <- vector(mode='integer', length=max_possible)
     for (i in 1:max_possible) {
-      nodes_list <- as.integer(unlist(strsplit(intToBin(i-1), split = "")))
+      nodes_list <- as.integer(unlist(strsplit(R.utils::intToBin(i-1), split = "")))
       nodes_list <- c(rep(0, n_possible_permute_nodes - length(nodes_list)), nodes_list)
       select_nodes <- rep(0, N-1)
       select_nodes[permuting_nodes - N] <- nodes_list
@@ -155,7 +155,7 @@ simulate_S_grid <- function(tree, nperm_planar, nperm_labels) {
     S_matrix <- matrix(nrow=max_possible_planar, ncol=nrow(labels_all))
 
     for (i in 1:max_possible_planar) {
-      nodes_list <- as.integer(unlist(strsplit(intToBin(i-1), split = "")))
+      nodes_list <- as.integer(unlist(strsplit(R.utils::intToBin(i-1), split = "")))
       nodes_list <- c(rep(0, n_possible_permute_nodes - length(nodes_list)), nodes_list)
       select_nodes <- rep(0, N-1)
       select_nodes[permuting_nodes - N] <- nodes_list

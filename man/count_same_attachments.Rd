@@ -9,9 +9,9 @@ count_same_attachments(tree, nodes_to_switch = c(), tip_order = FALSE)
 \arguments{
 \item{tree}{A \code{phylo} object: a ranked, planar, partially labeled tree shape}
 
-\item{tip_order}{Boolean for whether to return the order the tips were added or not}
+\item{nodes_to_switch}{vector of internal nodes to switch the left and right subtrees when calculating S (default empty)}
 
-\item{nodes_to_switch:}{vector of internal nodes to switch the left and right subtrees when calculating S (default empty)}
+\item{tip_order}{Boolean for whether to return the order the tips were added or not}
 }
 \value{
 Integer: number of same attachments

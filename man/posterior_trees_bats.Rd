@@ -9,11 +9,11 @@ posterior_trees_bats(tree_list, tree_term, n_bats = 500, nperm_obs = 500)
 \arguments{
 \item{tree_list}{A list of trees, usually a posterior distribution of trees}
 
+\item{tree_term}{String specifying all tip labels containing this term are one category, and the rest form the other category}
+
 \item{n_bats}{Integer: number of label permutations of the given tree}
 
 \item{nperm_obs}{Integer: number of planar permutations of the given tree to get S_mean}
-
-\item{term}{String specifying all tip labels containing this term are one category, and the rest form the other category}
 }
 \value{
 A vector with the median values of S_mean across BaTS

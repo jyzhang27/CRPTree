@@ -4,8 +4,8 @@
 #' It also processes the trees into desired format given a term or matrix indicating
 #' the categories of tip labels
 #'
-#' @param tree A ranked, planar, partially labeled tree
-#' @param term String specifying all tip labels containing this term are one category, and the rest form the other category
+#' @param tree_list A list of ranked, planar, partially labeled trees
+#' @param tree_term String specifying all tip labels containing this term are one category, and the rest form the other category
 #' @param tree_tip_correspondence Matrix with two columns: first column is the tip labels of the tree, second is the category
 #' @param nperm_planar Integer: number of planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree
@@ -15,7 +15,7 @@
 posterior_trees_pval <- function(tree_list, tree_term, tree_tip_correspondence, nperm_planar=500, nperm_labels=499) {
   tree_list_processed <- lapply(tree_list, process_tree, tree_term, tree_tip_correspondence)
   ntrees <- length(tree_list_processed)
-  tree_list_post <- t(mcmapply(one_tree_pval, tree_list_processed, rep(nperm_planar, ntrees), rep(nperm_planar, ntrees), rep(nperm_labels, ntrees), mc.cores=8))
+  tree_list_post <- t(mcmapply(one_tree_all_methods, tree_list_processed, rep(nperm_planar, ntrees), rep(nperm_planar, ntrees), rep(nperm_labels, ntrees), mc.cores=8))
   colnames(tree_list_post) <- c('S_mean', 'pval_tree', 'pval_avg')
   return(tree_list_post)
 }
@@ -26,7 +26,7 @@ posterior_trees_pval <- function(tree_list, tree_term, tree_tip_correspondence, 
 #' It also processes the trees into desired format given a term (only term)
 #'
 #' @param tree_list A list of trees, usually a posterior distribution of trees
-#' @param term String specifying all tip labels containing this term are one category, and the rest form the other category
+#' @param tree_term String specifying all tip labels containing this term are one category, and the rest form the other category
 #' @param nperm_obs Integer: number of planar permutations of the given tree to get S_mean
 #' @param n_bats Integer: number of label permutations of the given tree
 #'
@@ -41,7 +41,7 @@ posterior_trees_bats <- function(tree_list, tree_term, n_bats = 500, nperm_obs =
 
   tree_permutations <- t(replicate(n_bats, sample(1:length(tip_labels))))
   tree_bats <- mclapply(trees_with_label, one_tree_bats, tip_labels_base = tip_labels,
-                        tip_labels_binary_base, tip_labels_binary, label_permutations= tree_permutations, mc.cores = 8)
+                        tip_labels_binary_base= tip_labels_binary, label_permutations= tree_permutations, mc.cores = 8)
   tree_bats <- simplify2array(tree_bats)
   tree_bats_medians <- apply(tree_bats, 1, median)
   return(tree_bats_medians)

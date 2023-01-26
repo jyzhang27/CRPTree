@@ -217,7 +217,7 @@ lrt_1tree <- function(tree) {
 #' ranked, planar, partially labeled trees generated under CRP-TREE(N,B, alpha)
 #' with the same N and alpha
 #'
-#' @param tree A ranked, planar, partially labeled tree
+#' @param tree_list A list of ranked, planar, partially labeled trees
 #'
 #' @return A vector with the MLE and p-value
 #' @export

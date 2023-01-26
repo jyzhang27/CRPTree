@@ -13,15 +13,15 @@ posterior_trees_pval(
 )
 }
 \arguments{
+\item{tree_list}{A list of ranked, planar, partially labeled trees}
+
+\item{tree_term}{String specifying all tip labels containing this term are one category, and the rest form the other category}
+
 \item{tree_tip_correspondence}{Matrix with two columns: first column is the tip labels of the tree, second is the category}
 
 \item{nperm_planar}{Integer: number of planar permutations of the given tree}
 
 \item{nperm_labels}{Integer: number of label permutations of the given tree}
-
-\item{tree}{A ranked, planar, partially labeled tree}
-
-\item{term}{String specifying all tip labels containing this term are one category, and the rest form the other category}
 }
 \value{
 A matrix with the values of S_mean, pval_tree, and pval_avg for each tree

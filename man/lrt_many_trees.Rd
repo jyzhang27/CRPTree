@@ -7,7 +7,7 @@
 lrt_many_trees(tree_list)
 }
 \arguments{
-\item{tree}{A ranked, planar, partially labeled tree}
+\item{tree_list}{A list of ranked, planar, partially labeled trees}
 }
 \value{
 A vector with the MLE and p-value
