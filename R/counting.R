@@ -70,7 +70,7 @@ count_partial_labels <- function(tree, B) {
   # for more tips: N >= 4
 
   # prune the tree at the node
-  sub1 <- get_subtree_at_node(tree, 2)$subtree
+  sub1 <- castor::get_subtree_at_node(tree, 2)$subtree
   n1 <- sub1$Nnode + 1
   n2 <- ntips - n1
 
@@ -108,7 +108,7 @@ count_partial_labels <- function(tree, B) {
 
   # get the other half of the tree
   # above case takes care of 1-tup subtree case
-  sub2 <- get_subtree_with_tips(tree, omit_tips = sub1$tip.label)$subtree
+  sub2 <- castor::get_subtree_with_tips(tree, omit_tips = sub1$tip.label)$subtree
 
   if (n1 == 1) {
     total <- count_partial_labels(sub2, B) + count_partial_labels(sub2, B-1)
@@ -166,7 +166,7 @@ get_mle_1tree <- function(tree) {
   data <- get_tree_sufficient_stats(tree)
   S <- data[1]
   W <- data[2:length(data)]
-  return(optimize(log_like_one, c(1,10000), tol= 1e-6, N=N, S=S, W=W, maximum=TRUE))
+  return(stats::optimize(log_like_one, c(1,10000), tol= 1e-6, N=N, S=S, W=W, maximum=TRUE))
 }
 
 #' Computes the MLE of alpha for a list of ranked, planar, partially labeled trees
@@ -185,7 +185,7 @@ get_mle_trees <- function(tree_list) {
   Ns <- rep(nrow(data_matrix)+1, length(tree_list))
 
   suff_stats <- rbind(Ns, data_matrix)
-  return(optimize(log_like_multiple, c(1,10000), tol= 1e-6, suff_stats, maximum=TRUE))
+  return(stats::optimize(log_like_multiple, c(1,10000), tol= 1e-6, suff_stats, maximum=TRUE))
 }
 
 #' Applies LRT for a ranked, planar, partially labeled tree
@@ -205,7 +205,7 @@ lrt_1tree <- function(tree) {
   null_like <- -sum(log(2:(tree$Nnode)))
 
   D <- 2*(alt_like - null_like)
-  pval_chi_squared <- 1-pchisq(max(D,0), 1)
+  pval_chi_squared <- 1-stats::pchisq(max(D,0), 1)
   results <- c(alpha_mle, pval_chi_squared)
   names(results) <- c('alpha_MLE', 'pval')
   return(results)
@@ -229,7 +229,7 @@ lrt_many_trees <- function(tree_list) {
   null_like <- -length(tree_list)*sum(log(2:(tree_list[[1]]$Nnode)))
 
   D <- 2*(alt_like - null_like)
-  pval_chi_squared <- 1-pchisq(max(D,0), 1)
+  pval_chi_squared <- 1-stats::pchisq(max(D,0), 1)
   results <- c(alpha_mle, pval_chi_squared)
   names(results) <- c('alpha_MLE', 'pval')
   return(results)

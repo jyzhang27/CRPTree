@@ -19,8 +19,8 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
 
   # If there are two categories, ensure the labels are -1 and -2
   if (nchar(term) == 0 & length(setdiff(unique_labels, c(-2,-1))) != 0) {
-    tree$tip.label <-  replace(tip_labels, tip_labels == unique_labels[1], -1)
-    tree$tip.label <-  replace(tip_labels, tip_labels == unique_labels[2], -2)
+    tree$tip.label <- replace(tip_labels, tip_labels == unique_labels[1], -1)
+    tree$tip.label <- replace(tip_labels, tip_labels == unique_labels[2], -2)
   }
 
   # If tip matrix given
@@ -44,7 +44,7 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
   }
 
   # Change to Newick form which is the only workable formula
-  tree_newick <- read.tree(text=NewickTree(tree))
+  tree_newick <- ape::read.tree(text=TreeTools::NewickTree(tree))
   return(tree_newick)
 }
 
@@ -146,7 +146,7 @@ simulate_S_grid <- function(tree, nperm_planar, nperm_labels) {
 
   tree_blues <- sum(tree$tip.label== -1)
   if (nperm_labels > choose(N, tree_blues)) {
-    labels_all <- permutations(freq = c(tree_blues, N-tree_blues), k= N, x= c(-1, -2))
+    labels_all <- arrangements::permutations(freq = c(tree_blues, N-tree_blues), k= N, x= c(-1, -2))
   } else {
     labels_all <- t(replicate(nperm_labels, sample(tree$tip.label)))
   }
@@ -295,7 +295,7 @@ one_tree_fitch <- function(tree, observed) {
     tip_mat <- matrix(sample(tips), ncol=1, byrow=TRUE)
   }
   row.names(tip_mat) <- as.character(1:N)
-  tree_phyDat <- phyDat(tip_mat, type="USER", levels= unique(as.vector(tip_mat)))
+  tree_phyDat <- phangorn::phyDat(tip_mat, type="USER", levels= unique(as.vector(tip_mat)))
   return(fitch(tree_temp, tree_phyDat))
 }
 
@@ -315,7 +315,7 @@ one_tree_ai <- function(tree, observed) {
   if (!observed) {
     tree$tip.label <- sample(tree$tip.label)
   }
-  all_subtrees <- get_subtrees_at_nodes(tree, 1:(tree$Nnode))$subtrees
+  all_subtrees <- castor::get_subtrees_at_nodes(tree, 1:(tree$Nnode))$subtrees
   num_tips <- sapply(all_subtrees, function(x){x$Nnode+1})
   prop_tips <- sapply(all_subtrees, function(x){max(table(x$tip.label))/ (x$Nnode+1)})
 

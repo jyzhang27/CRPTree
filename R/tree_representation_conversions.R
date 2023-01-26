@@ -187,7 +187,7 @@ create_tree_attachments <- function(attachment_matrix) {
   # Create desired format
   tree <- list(edge = edge_list, tip.label = 1:N, Nnode = N-1, edge.length=branch_lengths)
   class(tree) <- "phylo"
-  tree <- read.tree(text=NewickTree(tree))
+  tree <- ape::read.tree(text=TreeTools::NewickTree(tree))
   node_labels <- colors[strtoi(tree$tip.label)]
   tree$tip.label = node_labels
 

@@ -12,7 +12,8 @@ crp_tree_power(
   num_pl = 500,
   nperm_null = 300,
   nperm_labels = 300,
-  acceptances = FALSE
+  acceptances = FALSE,
+  nCores = 8
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ crp_tree_power(
 \item{nperm_labels}{Integer: number of label permutations of the given tree}
 
 \item{acceptances}{Boolean whether to return the number of acceptances as well (default \code{FALSE})}
+
+\item{nCores}{Integer: number of cores for parallel processes}
 }
 \value{
 A matrix with the power of each method under each alpha (and possible the number of acceptances)

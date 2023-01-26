@@ -117,7 +117,7 @@ If you would to do a power analysis for a given ranked tree shape and an $\alpha
 
 ```{r}
 alphas <- c(2,20)
-crp_tree_power(tree_ex, alphas, num_sample= 50, num_pl=50, nperm_null = 30, nperm_labels=30)
+crp_tree_power(tree_ex, alphas, num_sample= 50, num_pl=50, nperm_null = 30, nperm_labels=30, nCores=2)
 ```
 
 ## Fixed Tree Computations

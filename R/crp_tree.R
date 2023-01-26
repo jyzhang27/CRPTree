@@ -127,7 +127,7 @@ rcrp_tree <- function(N, B, alpha) {
   # Create desired format
   tree <- list(edge = edge_list, tip.label = 1:N, Nnode = N-1, edge.length=branch_lengths)
   class(tree) <- "phylo"
-  tree <- read.tree(text=NewickTree(tree))
+  tree <- ape::read.tree(text=TreeTools::NewickTree(tree))
   tree$tip.label = rtips[strtoi(tree$tip.label)]
 
   return(tree)
@@ -222,7 +222,7 @@ count_same_attachments <- function(tree, nodes_to_switch=c(), tip_order=FALSE) {
   }
 
   tree_colors <- tree$tip.label
-  all_distances_pairs <- get_all_pairwise_distances(tree)
+  all_distances_pairs <- castor::get_all_pairwise_distances(tree)
   distance_to_root <- all_distances_pairs[(N+1), internal_nodes]
 
   coalescent_order <- internal_nodes[order(distance_to_root, decreasing=TRUE)]
@@ -381,7 +381,7 @@ reorder_branches <- function(tree, nodes) {
     if (second_edge_child <= N) {
       temp_2 <- edges_w_length[second_edge, ]
     } else{
-      second_edge_all_children <- getDescendants(tree, second_edge_child)
+      second_edge_all_children <- phytools::getDescendants(tree, second_edge_child)
       second_edge_all_children_tips <- second_edge_all_children[second_edge_all_children <= N]
       second_edge_last_edge <- max(which(edges_w_length [,2] %in% second_edge_all_children))
       #print(second_edge_last_edge)
@@ -403,7 +403,7 @@ reorder_branches <- function(tree, nodes) {
   new_tiporder <- edges_new[which(edges_new[,2] <= N), 2]
   edges_new[which(edges_new[,2] <= N), 2] <- 1:N
 
-  edges_renumbered<- RenumberTree(parent= edges_new[,1], child=edges_new[,2])
+  edges_renumbered<- TreeTools::RenumberTree(parent= edges_new[,1], child=edges_new[,2])
 
   tree_new <- tree
   tree_new$edge <- edges_renumbered
@@ -442,7 +442,7 @@ compute_attachment_matrix <- function(tree, nodes_to_switch) {
 
   internal_nodes <- (N+1):(2*N-1)
 
-  all_distances_pairs <- get_all_pairwise_distances(tree)
+  all_distances_pairs <- castor::get_all_pairwise_distances(tree)
   distance_to_root <- all_distances_pairs[(N+1), internal_nodes]
 
   coalescent_order <- internal_nodes[order(distance_to_root, decreasing=TRUE)]

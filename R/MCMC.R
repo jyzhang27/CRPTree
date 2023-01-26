@@ -14,11 +14,12 @@
 #' @param nperm_null Integer: number of planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree
 #' @param acceptances Boolean whether to return the number of acceptances as well (default \code{FALSE})
+#' @param nCores Integer: number of cores for parallel processes
 #'
 #' @return A matrix with the power of each method under each alpha (and possible the number of acceptances)
 #' @export
-crp_tree_power <- function(tree, alphas, sig_level=0.05, num_sample= 500, num_pl=500, nperm_null = 300, nperm_labels=300, acceptances=FALSE) {
-  tree_MCMC <- lapply(alphas, MCMC_sample_tree_cond_ranked, fixed_tree= tree, num_sample, num_pl)
+crp_tree_power <- function(tree, alphas, sig_level=0.05, num_sample= 500, num_pl=500, nperm_null = 300, nperm_labels=300, acceptances=FALSE, nCores=8) {
+  tree_MCMC <- lapply(alphas, MCMC_sample_tree_cond_ranked, fixed_tree= tree, num_sample, num_pl, nCores= nCores)
   tree_null_thresh <- compute_null_thresholds(tree, nperm_null, nperm_labels, sig_level)
   tree_power_all <- t(sapply(tree_MCMC, compute_power, tree_null_thresh))
   tree_power_all <- cbind(alphas, tree_power_all)
@@ -179,7 +180,7 @@ MCMC_sample_tree_simult <- function(fixed_tree, alpha, num_sample) {
 # Output: Returns probabilities, S values, and number of acceptances in MCMC chain
 # Does not return the trees
 # Need to run per alpha
-MCMC_sample_tree_cond_ranked <- function(fixed_tree, alpha, num_sample, num_pl, g_func='unif_one') {
+MCMC_sample_tree_cond_ranked <- function(fixed_tree, alpha, num_sample, num_pl, nCores = 8, g_func='unif_one') {
   N <- fixed_tree$Nnode + 1
 
   tree_initial <- fixed_tree
@@ -219,7 +220,7 @@ MCMC_sample_tree_cond_ranked <- function(fixed_tree, alpha, num_sample, num_pl, 
     s_labeled_sample[i+1] <- s_initial
   }
 
-  MCMC_planar_samples <- mclapply(tree_labeled_sample, MCMC_sample_tree_cond_ranked_pl, alpha,num_sample, g_func, mc.cores=8)
+  MCMC_planar_samples <- parallel::mclapply(tree_labeled_sample, MCMC_sample_tree_cond_ranked_pl, alpha,num_sample, g_func, mc.cores=nCores)
   MCMC_planar_samples <- unlist(MCMC_planar_samples, recursive=FALSE, use.names=FALSE)
 
   MCMC_pcrp_all <- unlist(MCMC_planar_samples[seq(1, length(MCMC_planar_samples), by=3)], use.names=FALSE)
@@ -242,11 +243,9 @@ MCMC_sample_tree_cond_ranked <- function(fixed_tree, alpha, num_sample, num_pl, 
 other_stats_alt <- function(tree_list_MCMC) {
   tree_MCMC_ai <- sapply(tree_list_MCMC, one_tree_ai, TRUE)
   tree_MCMC_ps <- sapply(tree_list_MCMC, one_tree_fitch, TRUE)
-  # tree_MCMC_moran.i <- sapply(tree_list_MCMC, tree_moran.i, FALSE)
+
   result <- list(tree_MCMC_ai, tree_MCMC_ps)
   names(result) <- c('ai_alt', 'ps_alt')
-  #result <- list(tree_MCMC_ai, tree_MCMC_ps, tree_MCMC_moran.i)
-  #names(result) <- c('ai_alt', 'ps_alt', 'moran.i_alt')
   return(result)
 }
 

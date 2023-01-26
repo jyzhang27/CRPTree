@@ -15,7 +15,8 @@
 posterior_trees_pval <- function(tree_list, tree_term, tree_tip_correspondence, nperm_planar=500, nperm_labels=499) {
   tree_list_processed <- lapply(tree_list, process_tree, tree_term, tree_tip_correspondence)
   ntrees <- length(tree_list_processed)
-  tree_list_post <- t(mcmapply(one_tree_all_methods, tree_list_processed, rep(nperm_planar, ntrees), rep(nperm_planar, ntrees), rep(nperm_labels, ntrees), mc.cores=8))
+  tree_list_post <- t(parallel::mcmapply(one_tree_all_methods, tree_list_processed, rep(nperm_planar, ntrees),
+                                         rep(nperm_planar, ntrees), rep(nperm_labels, ntrees), mc.cores=8))
   colnames(tree_list_post) <- c('S_mean', 'pval_tree', 'pval_avg')
   return(tree_list_post)
 }
@@ -40,7 +41,7 @@ posterior_trees_bats <- function(tree_list, tree_term, n_bats = 500, nperm_obs =
   ntips <- length(tip_labels)
 
   tree_permutations <- t(replicate(n_bats, sample(1:length(tip_labels))))
-  tree_bats <- mclapply(trees_with_label, one_tree_bats, tip_labels_base = tip_labels,
+  tree_bats <- parallel::mclapply(trees_with_label, one_tree_bats, tip_labels_base = tip_labels,
                         tip_labels_binary_base= tip_labels_binary, label_permutations= tree_permutations, mc.cores = 8)
   tree_bats <- simplify2array(tree_bats)
   tree_bats_medians <- apply(tree_bats, 1, median)

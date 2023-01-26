@@ -8,10 +8,8 @@ License: `use_gpl3_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.2
-Depends: ape, apTreeshape, phangorn, castor, TreeTools, phytools, parallel, arrangements, stepR, stats
+Imports: ape, apTreeshape, phangorn, castor, TreeTools, phytools, parallel, arrangements, stepR, stats, R.utils
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 BuildVignettes: true
 LazyData: true
-Imports: 
-    R.utils
