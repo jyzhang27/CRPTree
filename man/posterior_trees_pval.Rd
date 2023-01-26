@@ -7,9 +7,10 @@
 posterior_trees_pval(
   tree_list,
   tree_term,
-  tree_tip_correspondence,
+  tree_tip_correspondence = NULL,
   nperm_planar = 500,
-  nperm_labels = 499
+  nperm_labels = 499,
+  nCores = 8
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ posterior_trees_pval(
 \item{nperm_planar}{Integer: number of planar permutations of the given tree}
 
 \item{nperm_labels}{Integer: number of label permutations of the given tree}
+
+\item{nCores}{Integer: number of parallel processes to run}
 }
 \value{
 A matrix with the values of S_mean, pval_tree, and pval_avg for each tree

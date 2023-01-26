@@ -4,7 +4,13 @@
 \alias{posterior_trees_bats}
 \title{Applies BaTS on a posterior distribution of trees}
 \usage{
-posterior_trees_bats(tree_list, tree_term, n_bats = 500, nperm_obs = 500)
+posterior_trees_bats(
+  tree_list,
+  tree_term,
+  n_bats = 500,
+  nperm_obs = 500,
+  nCores = 8
+)
 }
 \arguments{
 \item{tree_list}{A list of trees, usually a posterior distribution of trees}
@@ -14,6 +20,8 @@ posterior_trees_bats(tree_list, tree_term, n_bats = 500, nperm_obs = 500)
 \item{n_bats}{Integer: number of label permutations of the given tree}
 
 \item{nperm_obs}{Integer: number of planar permutations of the given tree to get S_mean}
+
+\item{nCores}{Integer: number of parallel processes to run}
 }
 \value{
 A vector with the median values of S_mean across BaTS
