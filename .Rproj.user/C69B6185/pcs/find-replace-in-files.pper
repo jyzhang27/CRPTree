@@ -1,12 +1,12 @@
 {
     "dialog-state": {
-        "query": "\\c",
+        "query": "read.tree(text = NewickTree(tree))",
         "path": "~/Documents/CRPTree",
         "regex": false,
         "caseSensitive": false,
         "filePatterns": [],
         "excludeFilePatterns": [],
-        "resultsCount": 21,
+        "resultsCount": 0,
         "errorCount": 0,
         "replaceErrors": ""
     }
