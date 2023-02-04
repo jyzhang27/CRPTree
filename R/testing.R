@@ -33,15 +33,15 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
   }
 
   # Change to Newick form which is the only workable formula
-  tree <- read.tree(text=NewickTree(tree))
+  tree <- ape::read.tree(text=TreeTools::NewickTree(tree))
 
   # Extend the tips to be isochronous
-  distances <- get_all_distances_to_root(tree)
-  tree <- extend_tree_to_height(tree, new_height = ceiling(max(distances)))$tree
+  distances <- castor::get_all_distances_to_root(tree)
+  tree <- castor::extend_tree_to_height(tree, new_height = ceiling(max(distances)))$tree
 
   # check there are no ties in internal nodes
   N <- tree$Nnode + 1
-  distances <- get_all_distances_to_root(tree)[(N+1): (2*N-1)]
+  distances <- castor::get_all_distances_to_root(tree)[(N+1): (2*N-1)]
   if (length(unique(distances)) < N-1) {
     stop('Ties exist in internal nodes')
   }
