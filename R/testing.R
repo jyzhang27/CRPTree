@@ -11,6 +11,7 @@
 process_tree <- function(tree, term='', tip_corresponding=NULL) {
   tip_labels <- tree$tip.label
   unique_labels <- unique(tip_labels)
+  if (term==NULL){term=''}
 
   # If the tip labels have names as the category indicator
   if (nchar(term) >0) {
