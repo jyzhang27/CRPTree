@@ -11,7 +11,6 @@
 process_tree <- function(tree, term='', tip_corresponding=NULL) {
   tip_labels <- tree$tip.label
   unique_labels <- unique(tip_labels)
-  if (term==NULL){term=''}
 
   # If the tip labels have names as the category indicator
   if (nchar(term) >0) {
@@ -20,11 +19,10 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
 
   # If there are two categories, ensure the labels are -1 and -2
   if (nchar(term) == 0 & length(setdiff(unique_labels, c(-2,-1))) != 0) {
-    tree$tip.label <- replace(tip_labels, tip_labels == unique_labels[1], -1)
-    tree$tip.label <- replace(tip_labels, tip_labels == unique_labels[2], -2)
+    tree$tip.label <-  replace(tip_labels, tip_labels == unique_labels[1], -1)
+    tree$tip.label <-  replace(tip_labels, tip_labels == unique_labels[2], -2)
   }
 
-  # If tip matrix given
   if (!is.null(tip_corresponding)) {
     if (nrow(tip_corresponding) != length(tip_labels) | ncol(tip_corresponding) != 2) {
       stop('Invalid tip label-category correspondence')
@@ -34,8 +32,12 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
     tree$tip.label <- tip_corresponding[index,2]
   }
 
+  # Change to Newick form which is the only workable formula
+  tree <- read.tree(text=NewickTree(tree))
+
   # Extend the tips to be isochronous
-  tree <- extend_tree_to_height(tree)$tree
+  distances <- get_all_distances_to_root(tree)
+  tree <- extend_tree_to_height(tree, new_height = ceiling(max(distances)))$tree
 
   # check there are no ties in internal nodes
   N <- tree$Nnode + 1
@@ -44,9 +46,7 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
     stop('Ties exist in internal nodes')
   }
 
-  # Change to Newick form which is the only workable formula
-  tree_newick <- ape::read.tree(text=TreeTools::NewickTree(tree))
-  return(tree_newick)
+  return(tree)
 }
 
 
