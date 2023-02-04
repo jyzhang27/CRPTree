@@ -6,7 +6,7 @@
 \usage{
 posterior_trees_pval(
   tree_list,
-  tree_term,
+  tree_term = "",
   tree_tip_correspondence = NULL,
   nperm_planar = 500,
   nperm_labels = 499,

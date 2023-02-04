@@ -13,7 +13,7 @@
 #'
 #' @return A matrix with the values of S_mean, pval_tree, and pval_avg for each tree
 #' @export
-posterior_trees_pval <- function(tree_list, tree_term, tree_tip_correspondence=NULL, nperm_planar=500, nperm_labels=499, nCores = 8) {
+posterior_trees_pval <- function(tree_list, tree_term='', tree_tip_correspondence=NULL, nperm_planar=500, nperm_labels=499, nCores = 8) {
   tree_list_processed <- lapply(tree_list, process_tree, tree_term, tree_tip_correspondence)
   ntrees <- length(tree_list_processed)
   tree_list_post <- t(parallel::mcmapply(one_tree_all_methods, tree_list_processed, rep(nperm_planar, ntrees),
