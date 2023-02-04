@@ -27,6 +27,8 @@ In many Bayesian phylogenetic applications, we will have a posterior sample of t
 
 The first step is to process the trees, in our case the term 'Human' is the binary factor for the tip labels. Next, we run the methods in order to get our three quantities of interest. 
 
+If you had a .trees file in nexus format, you can use ex_yfv<-read.nexus(file) 
+
 ```{r}
 
 data(ex_yfv)
