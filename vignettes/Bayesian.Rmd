@@ -27,7 +27,9 @@ In many Bayesian phylogenetic applications, we will have a posterior sample of t
 
 The first step is to process the trees, in our case the term 'Human' is the binary factor for the tip labels. Next, we run the methods in order to get our three quantities of interest. 
 
-If you had a .trees file in nexus format, you can use ex_yfv<-read.nexus(file). If you add labels manually, note that those only take values -1 and -2.
+If you had a .trees file in Nexus format, you can use \texttt{ex\_yfv <- read.nexus(file)}. If the trees are in Newick format, then, you can use \texttt{ex\_yfv <- read.tree(file)}. If you add labels manually, note that those only take values -1 and -2. That should be reflecting in either the \texttt{tree\_term\_correspondence} argument, or by specifying the \texttt{tree\_term} that differentiates the binary factor for the tip labels. 
+
+\textbf{Note:} The parameters that are set in the example are purely for the vignette to compile. One can use the default parameters when running their own example. 
 
 ```{r}
 

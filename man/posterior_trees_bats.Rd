@@ -6,7 +6,8 @@
 \usage{
 posterior_trees_bats(
   tree_list,
-  tree_term,
+  tree_term = "",
+  tree_tip_correspondence = NULL,
   n_bats = 500,
   nperm_obs = 500,
   nCores = 8
@@ -16,6 +17,8 @@ posterior_trees_bats(
 \item{tree_list}{A list of trees, usually a posterior distribution of trees}
 
 \item{tree_term}{String specifying all tip labels containing this term are one category, and the rest form the other category}
+
+\item{tree_tip_correspondence}{Matrix with two columns: first column is the tip labels of the tree, second is the category}
 
 \item{n_bats}{Integer: number of label permutations of the given tree}
 

@@ -30,17 +30,24 @@ posterior_trees_pval <- function(tree_list, tree_term='', tree_tip_correspondenc
 #'
 #' @param tree_list A list of trees, usually a posterior distribution of trees
 #' @param tree_term String specifying all tip labels containing this term are one category, and the rest form the other category
+#' @param tree_tip_correspondence Matrix with two columns: first column is the tip labels of the tree, second is the category
 #' @param nperm_obs Integer: number of planar permutations of the given tree to get S_mean
 #' @param n_bats Integer: number of label permutations of the given tree
 #' @param nCores Integer: number of parallel processes to run
 #'
 #' @return A vector with the median values of S_mean across BaTS
 #' @export
-posterior_trees_bats <- function(tree_list, tree_term, n_bats = 500, nperm_obs = 500, nCores=8) {
+posterior_trees_bats <- function(tree_list, tree_term='', tree_tip_correspondence=NULL, n_bats = 500, nperm_obs = 500, nCores=8) {
   trees_with_label <- lapply(tree_list, process_tree)
-  tip_labels <- trees_with_label[[1]]$tip.label
-  tip_labels_binary <- ifelse(grepl(tree_term, tip_labels), -1, -2)
-  tip_labels_matched <- cbind(tip_labels, tip_labels_binary)
+  if (nchar(tree_term) >0) {
+    tip_labels <- trees_with_label[[1]]$tip.label
+    tip_labels_binary <- ifelse(grepl(tree_term, tip_labels), -1, -2)
+    tip_labels_matched <- cbind(tip_labels, tip_labels_binary)
+  }
+
+  if (!is.null(tree_tip_correspondence)) {
+    tip_labels_matched <- tree_tip_correspondence
+  }
   ntips <- length(tip_labels)
 
   tree_permutations <- t(replicate(n_bats, sample(1:length(tip_labels))))
