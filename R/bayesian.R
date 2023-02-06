@@ -39,21 +39,21 @@ posterior_trees_pval <- function(tree_list, tree_term='', tree_tip_correspondenc
 #' @export
 posterior_trees_bats <- function(tree_list, tree_term='', tree_tip_correspondence=NULL, n_bats = 500, nperm_obs = 500, nCores=8) {
   trees_with_label <- lapply(tree_list, process_tree)
-  tip_labels <- trees_with_label[[1]]$tip.label
 
   if (nchar(tree_term) >0) {
+    tip_labels <- trees_with_label[[1]]$tip.label
     tip_labels_binary <- ifelse(grepl(tree_term, tip_labels), -1, -2)
-    tip_labels_matched <- cbind(tip_labels, tip_labels_binary)
   }
-
   if (!is.null(tree_tip_correspondence)) {
-    tip_labels_matched <- tree_tip_correspondence
+    tip_labels <- tree_tip_correspondence[,1]
+    tip_labels_binary <- tree_tip_correspondence[,2]
   }
   ntips <- length(tip_labels)
 
   tree_permutations <- t(replicate(n_bats, sample(1:length(tip_labels))))
   tree_bats <- parallel::mclapply(trees_with_label, one_tree_bats, tip_labels_base = tip_labels,
-                        tip_labels_binary_base= tip_labels_binary, label_permutations= tree_permutations, mc.cores = nCores)
+                                  tip_labels_binary_base= tip_labels_binary, label_permutations= tree_permutations, mc.cores = nCores)
+
   tree_bats <- simplify2array(tree_bats)
   tree_bats_medians <- apply(tree_bats, 1, median)
   return(tree_bats_medians)
@@ -87,8 +87,8 @@ one_tree_bats <- function(tree, tip_labels_base, tip_labels_binary_base, label_p
     labels_new_all <- tree_label_permutations_all[, tree_tip_order]
 
     S_matrix[i,] <- apply(labels_new_all, 1, function(x){compute_S_given_attachment_matrix(tree_new_attachments, x)})
-
   }
   S0 <- colMeans(S_matrix)
   return(S0)
 }
+

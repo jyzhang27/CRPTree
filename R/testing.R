@@ -18,7 +18,7 @@ process_tree <- function(tree, term='', tip_corresponding=NULL) {
   }
 
   # If there are two categories, ensure the labels are -1 and -2
-  if (nchar(term) == 0 & length(setdiff(unique_labels, c(-2,-1))) != 0) {
+  if (nchar(term) == 0 & length(unique_labels) == 2 & length(setdiff(unique_labels, c(-2,-1))) != 0) {
     tree$tip.label <-  replace(tip_labels, tip_labels == unique_labels[1], -1)
     tree$tip.label <-  replace(tip_labels, tip_labels == unique_labels[2], -2)
   }
