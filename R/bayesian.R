@@ -39,8 +39,9 @@ posterior_trees_pval <- function(tree_list, tree_term='', tree_tip_correspondenc
 #' @export
 posterior_trees_bats <- function(tree_list, tree_term='', tree_tip_correspondence=NULL, n_bats = 500, nperm_obs = 500, nCores=8) {
   trees_with_label <- lapply(tree_list, process_tree)
+  tip_labels <- trees_with_label[[1]]$tip.label
+
   if (nchar(tree_term) >0) {
-    tip_labels <- trees_with_label[[1]]$tip.label
     tip_labels_binary <- ifelse(grepl(tree_term, tip_labels), -1, -2)
     tip_labels_matched <- cbind(tip_labels, tip_labels_binary)
   }
