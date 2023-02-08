@@ -232,7 +232,7 @@ MCMC_sample_tree_cond_ranked <- function(fixed_tree, alpha, num_sample, num_pl, 
   print(c('acceptances', acceptances))
 
   result <- list(tree_labeled_sample, MCMC_pcrp_all, MCMC_s_all, s_mean_all, MCMC_planar_acceptances, acceptances)
-  names(result) <- c('trees_labeled_MCMC', 'prob', 'S', 'S_mean', 'acceptances_planar', 'acceptances_labels')
+  names(result) <- c('trees_labeled_MCMC', 'prob', 'S', 'mu_hat', 'acceptances_planar', 'acceptances_labels')
   return(result)
 
 }
@@ -249,17 +249,17 @@ other_stats_alt <- function(tree_list_MCMC) {
   return(result)
 }
 
-# Function to compute the null thresholds of S, S_mean, PS, AI
+# Function to compute the null thresholds of S, mu_hat, PS, AI
 # for a given tree shape, number of permutations, and significant levels
-# Note S, S_mean: large = more extreme
+# Note S, mu_hat: large = more extreme
 # PS, AI: small = more extreme
 # Returns 4 thresholds
 compute_null_thresholds <- function(tree, nperm_null, nperm_labels, sig_level) {
   S_grid_null <- simulate_S_grid(tree, nperm_null, nperm_labels)
-  S_mean_null <- colMeans(S_grid_null)
+  mu_hat_null <- colMeans(S_grid_null)
   S_null <- c(S_grid_null)
   S_thresh <- quantile(S_null, 1-sig_level)
-  S_mean_thresh <- quantile(S_mean_null, 1-sig_level)
+  mu_hat_thresh <- quantile(mu_hat_null, 1-sig_level)
 
   ai_null <- tree_ai(tree, nperm_labels)$null
   ps_null <- tree_fitch(tree, nperm_labels)$null
@@ -268,8 +268,8 @@ compute_null_thresholds <- function(tree, nperm_null, nperm_labels, sig_level) {
   ai_thresh <- quantile(ai_null, sig_level)
   ps_thresh <- quantile(ps_null, sig_level)
 
-  thresh <- c(S_thresh, S_mean_thresh, ai_thresh, ps_thresh)
-  names(thresh) <- c('S', 'S_mean', 'AI', 'PS')
+  thresh <- c(S_thresh, mu_hat_thresh, ai_thresh, ps_thresh)
+  names(thresh) <- c('S', 'mu_hat', 'AI', 'PS')
   return(thresh)
 }
 
@@ -278,14 +278,14 @@ compute_null_thresholds <- function(tree, nperm_null, nperm_labels, sig_level) {
 # Input: MCMC output, null_threshold output
 compute_power <- function(tree_MCMC, null_thresh) {
   S_all_power <- mean(tree_MCMC$S >= null_thresh[1])
-  S_mean_power <- mean(tree_MCMC$S_mean >= null_thresh[2])
+  mu_hat_power <- mean(tree_MCMC$mu_hat >= null_thresh[2])
 
   other_stats_alt <- other_stats_alt(tree_MCMC$trees_labeled_MCMC)
   ai_power <- mean(other_stats_alt$ai_alt <= null_thresh[3])
   ps_power <- mean(other_stats_alt$ps_alt <= null_thresh[4])
 
-  result <- c(S_all_power, S_mean_power, ai_power, ps_power)
-  names(result) <- c('S', 'S_mean', 'AI', 'PS')
+  result <- c(S_all_power, mu_hat_power, ai_power, ps_power)
+  names(result) <- c('S', 'mu_hat', 'AI', 'PS')
   return(result)
 }
 

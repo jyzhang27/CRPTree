@@ -27,10 +27,10 @@ posterior_trees_pval(
 \item{nCores}{Integer: number of parallel processes to run}
 }
 \value{
-A matrix with the values of S_mean, pval_tree, and pval_avg for each tree
+A matrix with the values of mu_hat, pval_tree, and pval_avg for each tree
 }
 \description{
-This function computes S_mean, pval_tree, and pval_avg for a list of trees
+This function computes mu_hat, pval_tree, and pval_avg for a list of trees
 It also processes the trees into desired format given a term or matrix indicating
 the categories of tip labels
 }

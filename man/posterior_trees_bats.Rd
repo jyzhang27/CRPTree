@@ -22,14 +22,14 @@ posterior_trees_bats(
 
 \item{n_bats}{Integer: number of label permutations of the given tree}
 
-\item{nperm_obs}{Integer: number of planar permutations of the given tree to get S_mean}
+\item{nperm_obs}{Integer: number of planar permutations of the given tree to get mu_hat}
 
 \item{nCores}{Integer: number of parallel processes to run}
 }
 \value{
-A vector with the median values of S_mean across BaTS
+A vector with the median values of mu_hat across BaTS
 }
 \description{
-This function computes S_mean, pval_tree, and pval_avg for a list of trees
+This function computes mu_hat, pval_tree, and pval_avg for a list of trees
 It also processes the trees into desired format given a term (only term)
 }

@@ -24,10 +24,10 @@ one_tree_all_methods(
 
 \item{alt_methods}{Boolean: whether to run for additional methods}
 
-\item{path}{If given, path to save observed distribution of S and null distributions of S and S_mean}
+\item{path}{If given, path to save observed distribution of S and null distributions of S and mu_hat}
 }
 \value{
-Named vector containing the p-values and observed S_mean
+Named vector containing the p-values and observed mu_hat
 }
 \description{
 This function computes the p-value for phylogenetic association testing

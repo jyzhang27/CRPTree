@@ -19,15 +19,16 @@ knitr::opts_chunk$set(
 ```{r setup}
 library(CRPTree)
 library(ggplot2)
+set.seed(56789)
 ```
 
 
 ## Incorporating phylogenetic uncertainty 
-In many Bayesian phylogenetic applications, we will have a posterior sample of trees. We can use our methods to get a posterior distribution of $\hat{S_0}, p_T, \bar{p}_S$ in order to make conclusions about whether there may be preferential attachment. We will present our example on Yellow fever virus here. The data is publicly available from this [BEAST tutorial](https://beast.community/workshop_continuous_diffusion_yfv). We only use 100 posterior trees for our small illustrative example. 
+In many Bayesian phylogenetic applications, we will have a posterior sample of trees. We can use our methods to get a posterior distribution of $\hat{\mu}, p_T, p_S$ in order to make conclusions about whether there may be preferential attachment. We will present our example on Yellow fever virus here. The data is publicly available from this [BEAST tutorial](https://beast.community/workshop_continuous_diffusion_yfv). We only use 100 posterior trees for our small illustrative example. 
 
 The first step is to process the trees, in our case the term 'Human' is the binary factor for the tip labels. Next, we run the methods in order to get our three quantities of interest. 
 
-If you had a .trees file in Nexus format, you can use \texttt{ex\_yfv <- read.nexus(file)}. If the trees are in Newick format, then, you can use \texttt{ex\_yfv <- read.tree(file)}. If you add labels manually, note that those only take values -1 and -2. That should be reflecting in either the \texttt{tree\_term\_correspondence} argument, or by specifying the \texttt{tree\_term} that differentiates the binary factor for the tip labels. 
+If you had a .trees file in Nexus format, you can use $\texttt{ex_yfv <- read.nexus(file)}$. If the trees are in Newick format, then, you can use $\texttt{ex_yfv <- read.tree(file)}$. If you add labels manually, note that those only take values -1 and -2. That should be reflecting in either the $\texttt{tree_term_correspondence}$ argument, or by specifying the $\texttt{tree_term}$ that differentiates the binary factor for the tip labels. 
 
 \textbf{Note:} The parameters that are set in the example are purely for the vignette to compile. One can use the default parameters when running their own example. 
 
@@ -43,19 +44,19 @@ We can plot the posterior distribution of these quantities and look at some summ
 colSums(yfv_post < 0.05)
 colSums(yfv_post < 0.01)
 
-median(yfv_post$S_mean)
-quantile(yfv_post$S_mean, probs=c(0.025, 0.975))
+median(yfv_post$mu_hat)
+quantile(yfv_post$mu_hat, probs=c(0.025, 0.975))
 
 ggplot(data=yfv_post,aes(pval_tree)) + geom_histogram(color='black', fill='gray') + 
   theme_light() + xlab('Posterior p-value') + geom_vline(xintercept=0.05, color='red') + 
   ggtitle('Posterior trees from Yellow fever virus samples') 
 
-ggplot(data=yfv_post, aes(S_mean)) + 
+ggplot(data=yfv_post, aes(mu_hat)) + 
   geom_histogram(color='black', fill='gray') + theme_light() + xlab('Posterior S0') +
   ggtitle('Posterior trees from Yellow fever virus samples') 
 ```
 
-Finally, we can use the BaTS method. For this, we need the trees to be with the original tip labels, because we permute the taxon in the same way for each tree. We would compare the final quantity \texttt{yfv_bats_medians} to the value of \texttt{median(yfv_post$S0)}. Here we apply BaTS. 
+Finally, we can use the BaTS method. For this, we need the trees to be with the original tip labels, because we permute the taxon in the same way for each tree. We would compare the final quantity $\texttt{yfv_bats_medians}$ to the value of $\texttt{median(yfv_post\$mu_hat)}$. Here we apply BaTS. 
 
 ```{r}
 yfv_bats_medians <- posterior_trees_bats(ex_yfv, 'Human', n_bats = 50, nperm_obs = 50, nCores= 2)

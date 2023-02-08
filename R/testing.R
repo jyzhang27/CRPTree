@@ -109,7 +109,7 @@ simulate_S_observed <- function(tree, nperm) {
   return(s_stat)
 }
 
-#' Estimates S_mean for a tree
+#' Estimates mu_hat for a tree
 #'
 #' This function estimates the mean number of attachments for a given tree shape
 #' with a set number of permutations
@@ -117,9 +117,9 @@ simulate_S_observed <- function(tree, nperm) {
 #' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm Integer: number of planar permutations of the given tree
 #'
-#' @return An integer with the value of S_mean
+#' @return An integer with the value of mu_hat
 #' @export
-compute_S_mean <- function(tree, nperm) {
+compute_mu_hat <- function(tree, nperm) {
   return(mean(simulate_S_observed(tree, nperm)))
 }
 
@@ -189,20 +189,20 @@ simulate_S_grid <- function(tree, nperm_planar, nperm_labels) {
   return(S_matrix)
 }
 
-#' Simulate null distribution of S_mean
+#' Simulate null distribution of mu_hat
 #'
-#' This function simulates the null distribution of S_mean for a given tree
+#' This function simulates the null distribution of mu_hat for a given tree
 #'
 #' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm_planar Integer: number of planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree
 #'
-#' @return A vector with the S_mean values
+#' @return A vector with the mu_hat values
 #' @export
-simulate_S_mean_tree <- function(tree, nperm_planar, nperm_labels) {
+simulate_mu_hat_tree <- function(tree, nperm_planar, nperm_labels) {
   S_matrix <- simulate_S_grid(tree, nperm_planar, nperm_labels)
-  S_mean <- colMeans(S_matrix)
-  return(S_mean)
+  mu_hat <- colMeans(S_matrix)
+  return(mu_hat)
 }
 
 #' Computes multiple p-values for phylogenetic association testing
@@ -216,25 +216,25 @@ simulate_S_mean_tree <- function(tree, nperm_planar, nperm_labels) {
 #' @param nperm_null Integer: number of simultaneous label planar permutations of the given tree
 #' @param nperm_labels Integer: number of label permutations of the given tree
 #' @param alt_methods Boolean: whether to run for additional methods
-#' @param path If given, path to save observed distribution of S and null distributions of S and S_mean
+#' @param path If given, path to save observed distribution of S and null distributions of S and mu_hat
 #'
-#' @return Named vector containing the p-values and observed S_mean
+#' @return Named vector containing the p-values and observed mu_hat
 #' @export
 one_tree_all_methods <- function(tree, nperm_obs=500, nperm_null=500, nperm_labels=499, alt_methods=FALSE, path=''){
   S_obs <- simulate_S_observed(tree, nperm_obs)
-  S_mean <- mean(S_obs)
+  mu_hat <- mean(S_obs)
 
   S_tree_null <- simulate_S_tree_null(tree, nperm_null)
-  S_mean_null <- simulate_S_mean_tree(tree, nperm_null, nperm_labels)
+  mu_hat_null <- simulate_mu_hat_tree(tree, nperm_null, nperm_labels)
 
-  pval_avg <- (1+ sum(S_mean_null >= S_mean))/(1+length(S_mean_null))
+  pval_avg <- (1+ sum(mu_hat_null >= mu_hat))/(1+length(mu_hat_null))
   pval_tree <- mean(rbind(outer(S_tree_null, S_obs, '>='), rep(TRUE, length(S_obs))))
 
   if (nchar(path) >0) {
     tree_name <- deparse(substitute(tree))
     write.csv(S_obs, paste(path, tree_name, '_S_obs.csv', sep=''))
     write.csv(S_tree_null, paste(path, tree_name, '_S_tree_null.csv', sep=''))
-    write.csv(S_mean_null, paste(path, tree_name, '_S_mean_null.csv', sep=''))
+    write.csv(mu_hat_null, paste(path, tree_name, '_mu_hat_null.csv', sep=''))
   }
 
   if (alt_methods) {
@@ -242,12 +242,12 @@ one_tree_all_methods <- function(tree, nperm_obs=500, nperm_null=500, nperm_labe
     pval_ps <- tree_fitch(tree, nperm_labels)$pval
     pval_moran <- tree_moran.i(tree)
 
-    result <- c(S_mean, pval_tree, pval_avg, pval_ai, pval_ps, pval_moran)
-    names(result) <- c('S_mean', 'pval_tree', 'pval_avg', 'pval_ai', 'pval_ps', 'pval_moran')
+    result <- c(mu_hat, pval_tree, pval_avg, pval_ai, pval_ps, pval_moran)
+    names(result) <- c('mu_hat', 'pval_tree', 'pval_avg', 'pval_ai', 'pval_ps', 'pval_moran')
     return(result)
   } else {
-    result <- c(S_mean, pval_tree, pval_avg)
-    names(result) <- c('S_mean', 'pval_tree', 'pval_avg')
+    result <- c(mu_hat, pval_tree, pval_avg)
+    names(result) <- c('mu_hat', 'pval_tree', 'pval_avg')
     return(result)
   }
 }

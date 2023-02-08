@@ -13,7 +13,7 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE, warning=FALSE, message=FALSE)
 library(CRPTree)
 library(ggplot2)
-set.seed(1234)
+set.seed(56789)
 
 ```
 
@@ -60,44 +60,44 @@ count_same_attachments(tree_ex)
 If we had a tree that was not planar, then we can average out the planarity by calculating the mean number of same attachments. We do so via Monte Carlo approximation and specifying the number of planar permutations. 
 
 ```{r}
-s_0 <- compute_S_mean(tree_ex, 500)
-s_0
+mu_hat <- compute_mu_hat(tree_ex, 500)
+mu_hat
 ```
 
 ### Processing trees 
-If provided with a phylogenetic tree, it must be in Newick format with tip labels $(-1, -2)$, have isochronous tips, and have no tied internal nodes. You would use \texttt{process\_tree} to modifys any tree into the desired form. The tip labels can be specified directly (ie only two possible tip labels). The argument \texttt{term} is used to change tip labels to $(-1,-2)$ given that each tip label either contains or does not contain the term. The data frame \texttt{tip\_corresponding} can also be provided as the category of each tip label. If neither argument is given, then the tree is returned with its original tip labels. 
+If provided with a phylogenetic tree, it must be in Newick format with tip labels $(-1, -2)$, have isochronous tips, and have no tied internal nodes. You would use \$texttt{process_tree}$ to modifys any tree into the desired form. The tip labels can be specified directly (ie only two possible tip labels). The argument $\texttt{term}$ is used to change tip labels to $(-1,-2)$ given that each tip label either contains or does not contain the term. The data frame $\texttt{tip_corresponding}$ can also be provided as the category of each tip label. If neither argument is given, then the tree is returned with its original tip labels. 
 
 ## Testing on fixed phylogenetic trees. 
 
 For ranked, partially labeled, non-planar trees $T^{\ell}_{N,B}$, we have two methods of testing.
 
 ### Fixing the ranked tree shape
-The first method measures how extreme $S$ is conditioned on a ranked tree shape $T_N$. The null distribution is the distribution of $S$ over the space of all ranked, partially labeled, planar trees $\tilde{T}^{\ell}_{N,B}$ that are compatible with $T_N$. The observed distribution is the distribution of $S$ over the planar representations of the given $T^{\ell}_{N,B}$. Then for each observed $S$, we calculate a p-value, and define the \textbf{tree shape conditioned p-value} $p_T$ to be the average of all such p-values. 
+The first method measures how extreme $S$ is conditioned on a ranked tree shape $T_N$. The null distribution is the distribution of $S$ over the space of all ranked, partially labeled, planar trees $\tilde{T}^{\ell}_{N,B}$ that are compatible with $T_N$. The observed distribution is the distribution of $S$ over the planar representations of the given $T^{\ell}_{N,B}$. Then for each observed $S$, we calculate a p-value, and define $p_T$ to be the average of all such p-values. 
 
 ```{r}
 S_obs <- simulate_S_observed(tree_ex, 50)
-S_mean <- mean(S_obs)
+mu_hat <- mean(S_obs)
 
 S_tree_null <- simulate_S_tree_null(tree_ex, 50)
 pval_tree <- mean(rbind(outer(S_tree_null, S_obs, '>='), rep(TRUE, length(S_obs))))
 
-ggplot(as.data.frame(S_tree_null), aes(S_tree_null)) + geom_bar(color='black', fill='gray') + theme_light()+ xlab('S') + ggtitle('Approximate null distribution of S conditional on T_N')
+ggplot(as.data.frame(S_tree_null), aes(S_tree_null)) + geom_bar(color='black', fill='gray') + theme_light()+ xlab('S') + ggtitle(expression(paste('Approximate null distribution of ', S, ' conditional on ',  T[N])))
   
 ```
 
-### Using $\hat{S_0}$ by averaging over planar representations
+### Using $\hat{\mu}$ by averaging over planar representations
 
-The second method simulates a null distribution of $\hat{S_0}$ by relabeling the given ranked tree shape and computing $\hat{S_0}$ for each relabeling. Then we compute $\bar{p}_S$, the average $S$ p-value using the observed value of $\hat{S_0}$.
+The second method simulates a null distribution of $\hat{\mu}$ by relabeling the given ranked tree shape and computing $\hat{\mu}$ for each relabeling. Then we compute $p_S$, the average $S$ p-value using the observed value of $\hat{\mu}$.
 
 ```{r}
-S_mean_null <- simulate_S_mean_tree(tree_ex, 50, 49)
-pval_avg <- (1+ sum(S_mean_null >= S_mean))/(1+length(S_mean_null))
+mu_hat_null <- simulate_mu_hat_tree(tree_ex, 50, 49)
+pval_avg <- (1+ sum(mu_hat_null >= mu_hat))/(1+length(mu_hat_null))
 
-ggplot(as.data.frame(S_mean_null), aes(S_mean_null)) + 
+ggplot(as.data.frame(mu_hat_null), aes(mu_hat_null)) + 
   geom_histogram(color='black', fill='gray', bins=20) + theme_light()+
-  scale_x_continuous(limits=c(floor(min(S_mean_null)), ceiling(max(c(max(S_mean_null), S_mean))))) +
-  geom_vline(xintercept=S_mean, color='red') + xlab('S_0') + 
-  ggtitle('Approximate null distribution of S_0, Red line is observed value')
+  scale_x_continuous(limits=c(floor(min(mu_hat_null)), ceiling(max(c(max(mu_hat_null), mu_hat))))) +
+  geom_vline(xintercept=mu_hat, color='red') + xlab('S_0') + 
+  ggtitle(expression(paste('Approximate null distribution of', hat(mu), ' , Red line is observed value')))
 ```
 
 There is a function if you just want the observed $\hat{S_0}$ for the partially labeled ranked tree shape, and the two p-values. There are additional parameters so that the null distributions and observed $S$ distributions can be saved for future use. 
@@ -137,7 +137,7 @@ count_ranked_pl_trees(8,4)
 
 
 ### Moments
-Given values for $N,B,\alpha$, we can calculate the expected value of $S$ under the CRP-TREE model. Taking the parameters we used to generate \texttt{tree_ex}. With $\alpha=2$, the expected value is approximately 18.92, while our observed value was 21.136. Under $\alpha=1$, the expected value is lower at 15.126. 
+Given values for $N,B,\alpha$, we can calculate the expected value of $S$ under the CRP-TREE model. Taking the parameters we used to generate $\texttt{tree_ex}$. With $\alpha=2$, the expected value is approximately 18.92, while our observed value was 21.136. Under $\alpha=1$, the expected value is lower at 15.126. 
 
 ```{r}
 expected_value_function(30, 10, 2)

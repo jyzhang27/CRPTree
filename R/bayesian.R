@@ -1,6 +1,6 @@
 #' Computes p-values for a posterior distribution of trees
 #'
-#' This function computes S_mean, pval_tree, and pval_avg for a list of trees
+#' This function computes mu_hat, pval_tree, and pval_avg for a list of trees
 #' It also processes the trees into desired format given a term or matrix indicating
 #' the categories of tip labels
 #'
@@ -11,31 +11,31 @@
 #' @param nperm_labels Integer: number of label permutations of the given tree
 #' @param nCores Integer: number of parallel processes to run
 #'
-#' @return A matrix with the values of S_mean, pval_tree, and pval_avg for each tree
+#' @return A matrix with the values of mu_hat, pval_tree, and pval_avg for each tree
 #' @export
 posterior_trees_pval <- function(tree_list, tree_term='', tree_tip_correspondence=NULL, nperm_planar=500, nperm_labels=499, nCores = 8) {
   tree_list_processed <- lapply(tree_list, process_tree, tree_term, tree_tip_correspondence)
   ntrees <- length(tree_list_processed)
   tree_list_post <- t(parallel::mcmapply(one_tree_all_methods, tree_list_processed, rep(nperm_planar, ntrees),
                                          rep(nperm_planar, ntrees), rep(nperm_labels, ntrees), mc.cores=nCores))
-  colnames(tree_list_post) <- c('S_mean', 'pval_tree', 'pval_avg')
+  colnames(tree_list_post) <- c('mu_hat', 'pval_tree', 'pval_avg')
   tree_list_post <- as.data.frame(tree_list_post)
   return(tree_list_post)
 }
 
 #' Applies BaTS on a posterior distribution of trees
 #'
-#' This function computes S_mean, pval_tree, and pval_avg for a list of trees
+#' This function computes mu_hat, pval_tree, and pval_avg for a list of trees
 #' It also processes the trees into desired format given a term (only term)
 #'
 #' @param tree_list A list of trees, usually a posterior distribution of trees
 #' @param tree_term String specifying all tip labels containing this term are one category, and the rest form the other category
 #' @param tree_tip_correspondence Matrix with two columns: first column is the tip labels of the tree, second is the category
-#' @param nperm_obs Integer: number of planar permutations of the given tree to get S_mean
+#' @param nperm_obs Integer: number of planar permutations of the given tree to get mu_hat
 #' @param n_bats Integer: number of label permutations of the given tree
 #' @param nCores Integer: number of parallel processes to run
 #'
-#' @return A vector with the median values of S_mean across BaTS
+#' @return A vector with the median values of mu_hat across BaTS
 #' @export
 posterior_trees_bats <- function(tree_list, tree_term='', tree_tip_correspondence=NULL, n_bats = 500, nperm_obs = 500, nCores=8) {
   trees_with_label <- lapply(tree_list, process_tree)
@@ -88,7 +88,7 @@ one_tree_bats <- function(tree, tip_labels_base, tip_labels_binary_base, label_p
 
     S_matrix[i,] <- apply(labels_new_all, 1, function(x){compute_S_given_attachment_matrix(tree_new_attachments, x)})
   }
-  S0 <- colMeans(S_matrix)
-  return(S0)
+  mu_hat <- colMeans(S_matrix)
+  return(mu_hat)
 }
 
