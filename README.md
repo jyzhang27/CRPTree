@@ -25,3 +25,6 @@ Note: In the vignettes, there are parameters for number of simulations that are 
 1. N.R. Faria et al.
 [Genomic and epidemiological monitoring of Yellow Fever virus transmission potential](https://www.science.org/doi/10.1126/science.aat7115).
 *Science*, 361(6405):894–899, 2018.
+
+2. J Zhang, GA Preising, M Schumer, JA Palacios. [CRP-Tree: A phylogenetic association test for binary traits](https://arxiv.org/abs/2302.09402)
+ *arXiv preprint* arXiv:2302.09402, 2023.
