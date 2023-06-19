@@ -16,9 +16,9 @@
 #' @import phytools
 #' @import parallel
 #' @import arrangements
-#' @import stepR
 #' @import stats
 #' @import utils
+#' @import ggplot2
 #'
 #' @export
 #' @examples rcrp_tree(10, 5, 2)

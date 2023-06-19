@@ -209,7 +209,7 @@ simulate_mu_hat_tree <- function(tree, nperm_planar, nperm_labels) {
 #'
 #' This function computes the p-value for phylogenetic association testing
 #' Default: average S p-value, tree-average p-value
-#' Additional: parsimony score, association index, Moran's I test
+#' Additional: parsimony score, association index
 #'
 #' @param tree A \code{phylo} object: a ranked, planar, partially labeled tree shape
 #' @param nperm_obs Integer: number of planar permutations of the given tree
@@ -240,10 +240,9 @@ one_tree_all_methods <- function(tree, nperm_obs=500, nperm_null=500, nperm_labe
   if (alt_methods) {
     pval_ai <- tree_ai(tree, nperm_labels)$pval
     pval_ps <- tree_fitch(tree, nperm_labels)$pval
-    pval_moran <- tree_moran.i(tree)
 
-    result <- c(mu_hat, pval_tree, pval_avg, pval_ai, pval_ps, pval_moran)
-    names(result) <- c('mu_hat', 'pval_tree', 'pval_avg', 'pval_ai', 'pval_ps', 'pval_moran')
+    result <- c(mu_hat, pval_tree, pval_avg, pval_ai, pval_ps)
+    names(result) <- c('mu_hat', 'pval_tree', 'pval_avg', 'pval_ai', 'pval_ps')
     return(result)
   } else {
     result <- c(mu_hat, pval_tree, pval_avg)
@@ -271,19 +270,6 @@ simulate_S_tree_one <- function(tree, cherries, children) {
 }
 
 ## Functions for the other methods
-
-# Moran's I from ape
-tree_moran.i <- function(tree, pval=TRUE) {
-  w <- 1/cophenetic(tree)
-  diag(w) <- 0
-  if (pval) {
-    return(Moran.I(as.numeric(tree$tip.label), w)$p.value)
-  } else {
-    result <- c(Moran.I(as.numeric(tree$tip.label), w)$observed, Moran.I(as.numeric(tree$tip.label), w)$expected)
-    names(result) <- c('moran.i_obs', 'moran.i_exp')
-    return(result)
-  }
-}
 
 one_tree_fitch <- function(tree, observed) {
   N <- tree$Nnode + 1

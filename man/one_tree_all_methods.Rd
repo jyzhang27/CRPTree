@@ -32,5 +32,5 @@ Named vector containing the p-values and observed mu_hat
 \description{
 This function computes the p-value for phylogenetic association testing
 Default: average S p-value, tree-average p-value
-Additional: parsimony score, association index, Moran's I test
+Additional: parsimony score, association index
 }

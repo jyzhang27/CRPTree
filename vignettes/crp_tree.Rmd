@@ -106,7 +106,7 @@ There is a function if you just want the observed $\hat{S_0}$ for the partially 
 one_tree_all_methods(tree_ex, 50, 49, 49)
 ```
 
-We can also compare to three other existing methods by specifying additional arguments.
+We can also compare to two other existing methods (parsimony score and association index) by specifying additional arguments. 
 ```{r}
 one_tree_all_methods(tree_ex, 50, 49, 49, alt_methods = TRUE)
 ```

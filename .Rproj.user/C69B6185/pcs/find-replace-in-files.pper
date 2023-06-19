@@ -1,13 +1,17 @@
 {
     "dialog-state": {
-        "query": "read.tree(text = NewickTree(tree))",
-        "path": "~/Documents/CRPTree",
+        "query": "ggplot2",
+        "path": "",
         "regex": false,
         "caseSensitive": false,
+        "wholeWord": false,
         "filePatterns": [],
+        "useGitGrep": true,
+        "excludeGitIgnore": false,
         "excludeFilePatterns": [],
-        "resultsCount": 0,
+        "resultsCount": 7,
         "errorCount": 0,
-        "replaceErrors": ""
+        "replaceErrors": "",
+        "projectRelative": true
     }
 }
