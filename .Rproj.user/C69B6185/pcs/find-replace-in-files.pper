@@ -1,6 +1,6 @@
 {
     "dialog-state": {
-        "query": "ggplot2",
+        "query": "apTreeshape",
         "path": "",
         "regex": false,
         "caseSensitive": false,
@@ -9,7 +9,7 @@
         "useGitGrep": true,
         "excludeGitIgnore": false,
         "excludeFilePatterns": [],
-        "resultsCount": 7,
+        "resultsCount": 5,
         "errorCount": 0,
         "replaceErrors": "",
         "projectRelative": true

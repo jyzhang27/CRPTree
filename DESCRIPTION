@@ -1,6 +1,6 @@
 Package: CRPTree
 Title: A phylogenetic association test based on a Chinese Restaurant Process-esque model
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     person("Julie", "Zhang", , "jyz27@stanford.edu", role = c("aut", "cre"))
 Description: Methods for phylogenetic association testing for binary traits.
@@ -8,7 +8,7 @@ License: GPL (>= 3)
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
-Imports: apTreeshape, phangorn, castor, TreeTools, phytools, parallel, arrangements, stats, R.utils, ggplot2
+Imports: phangorn, castor, TreeTools, phytools, parallel, arrangements, stats, R.utils, ggplot2
 Suggests: knitr, rmarkdown
 VignetteBuilder: knitr
 BuildVignettes: true

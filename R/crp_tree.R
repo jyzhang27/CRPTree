@@ -9,7 +9,6 @@
 #' @return A \code{phylo} object generated from CRP-TREE(alpha)
 #'
 #' @import ape
-#' @import apTreeshape
 #' @import phangorn
 #' @import castor
 #' @import TreeTools
