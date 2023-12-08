@@ -1,5 +1,5 @@
 # CRPTree
-Phylogenetic trait association for binary traits. [arxiv paper link](https://arxiv.org/abs/2302.09402)
+Phylogenetic trait association for binary traits. [Link to published paper](https://doi.org/10.1093/jrsssc/qlad098)
 
 ## Installation
 
